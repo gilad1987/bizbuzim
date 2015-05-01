@@ -1,2 +1,2 @@
-RewriteEngine On
-RewriteRule ^(admin|index)\/?(\d*[a-zA-Z]*)\/?+([a-zA-Z]*)?+\/?+([a-zA-Z]*)?+$ $1.php?c=$2&a=$3&page=$4 [QSA,L]
+#RewriteEngine On
+#RewriteRule ^(admin|index)\/?(\d*[a-zA-Z]*)\/?+([a-zA-Z]*)?+\/?+([a-zA-Z]*)?+$ $1.php?c=$2&a=$3&page=$4 [QSA,L]
