@@ -1,0 +1,31 @@
+{
+  "name": "bizbuzim",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gilad1987/bizbuzim.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gilad1987/bizbuzim/issues"
+  },
+  "homepage": "https://github.com/gilad1987/bizbuzim",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-html2js": "^0.2.0",
+    "gulp-inject": "^1.1.1",
+    "gulp-minify-css": "^1.1.0",
+    "gulp-uglify": "^1.2.0",
+    "gulp-watch": "^4.1.1"
+  },
+  "dependencies": {
+    "gulp-sass": "^1.3.3"
+  }
+}
