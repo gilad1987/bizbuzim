@@ -25,6 +25,9 @@ class Model_DbTable_Base {
         return Db::getInstance()->getConn();
     }
 
+    public function getTableName(){
+        return $this->tableName;
+    }
 
     private function createPlaceholder($text, $count=0, $separator=","){
         $result = array();
@@ -118,6 +121,141 @@ class Model_DbTable_Base {
         $result = $this->insertOrUpdateCollection(array($row));
         $this->id = $result->lastInsertId;
         return $result;
+    }
+
+
+    /**
+     * @return mixed|string
+     */
+    private function getQueryJoin(){
+        $query  = "SELECT tablefileds fileds FROM $this->tableName ";
+        $fields = '';
+        $tablefileds ='';
+        foreach ($this->fieldPDOTypeByName as $prop=>$val){
+            if(strstr($prop, "_id")){
+                $table = str_replace("_id", "", $prop)."s";
+                $modelName = "Model_DbTable_".ucfirst($table);
+                $model = new $modelName();
+                foreach ($model->fieldPDOTypeByName as $propModel=>$val){
+                    $fields .=" ,`{$table}`.`{$propModel}` as `{$table}_{$propModel}`";
+                }
+                $query .="INNER JOIN `{$table}` ON `{$this->tableName}`.`{$prop}` = `{$table}`.`id` ";
+            }
+            $tablefileds .= " `{$this->tableName}`.`{$prop}` ,";
+        }
+
+        $tablefileds = rtrim(trim($tablefileds),",");
+        $query = str_replace("tablefileds", $tablefileds, $query);
+        $fields = rtrim(trim($fields),",");
+        $query = str_replace("fileds", $fields, $query);
+        return $query;
+    }
+
+    /**
+     * @param array $where
+     * @param bool $hasJoin
+     * @param null $limit
+     * @param int $start
+     * @param null $order
+     * @return array
+     * @desc $where = array("table_name"=>array("field_name"=>value))
+     * @desc $where = array(
+     *                  "main_table_name"=>array("field_name"=>value),
+     *                  "join_table_name"=>array("field_name"=>value))
+     *
+     * @throws App_Mysql_Exceptions
+     */
+    public function fetchAll(array $where = array(), $hasJoin = false, $limit = null, $start = 0, $order = null){
+        $query = '';
+        $whereQuery = '';
+        if(!$hasJoin){
+            $query = "SELECT * FROM $this->tableName";
+        }
+        if($hasJoin){
+            $query = $this->getQueryJoin($this->tableName);
+        }
+
+        if(!empty($where)){
+            $whereQuery = ' WHERE';
+            $fileds =array();
+            $fileds_ref =array();
+            $types= "";
+            foreach ($where as $tableName=>$fields){
+                $modelName = "Model_DbTable_".ucfirst($tableName);
+                $model = new $modelName();
+                foreach ($fields as $fieldName=>$val){
+                    $types .= $model->fieldPDOTypeByName[$fieldName];
+                    $fileds_ref[] = $val;
+                    $whereQuery .= " `$tableName`.`$fieldName` = ? AND";
+                }
+            }
+            $whereQuery = trim($whereQuery,"AND");
+
+// 			for ($i=0; $i<count($fileds_ref); $i++){
+// 				$fileds[] = &$fileds_ref[$i];
+// 			}
+        }
+        $query .= $whereQuery;
+
+        if($order != null){
+            $query .= 'ORDER BY '.$order;
+        }
+
+        if($limit != null){
+            $query .=" LIMIT {$start},{$limit}";
+        }
+
+        $conn = $this->getConn();
+
+
+        if (!($stmt = $conn->prepare($query))) {
+            $error = "error";
+            if(DISPLAY_MYSQL_ERRORS){
+                $error = "Prepare failed: " .$conn->errorInfo();
+            }
+            throw new App_Mysql_Exceptions( $error );
+        }
+
+        if(!empty($where)){
+// 			$ref = new ReflectionClass('mysqli_stmt');
+// 			$method = $ref->getMethod("bind_param");
+// 			$refArr = array_merge(array("0"=>$types),$fileds);
+// 			$method->invokeArgs($stmt,$refArr);
+            $index =1;
+            foreach ($fileds_ref as $key=>&$filed){
+                $stmt->bindParam($index, $filed,PDO::PARAM_STR);
+                $index++;
+            }
+        }
+
+        if (!$stmt->execute()) {
+            $error = "error";
+            if(DISPLAY_MYSQL_ERRORS){
+                $error = "Execute failed: " .$conn->errorInfo();
+            }
+            throw new App_Mysql_Exceptions( $error );
+        }
+
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+// 		$rows = array();
+// 		while($row = $result->fetch_object()){
+// 			$rows[] = $row;
+// 		}
+        return $result;
+    }
+
+    /**
+     * @desc $where = array("table_name"=>array("field_name"=>value))
+     *
+     * @param array $where
+     * @param $withJoin
+     * @return null
+     * @throws App_Mysql_Exceptions
+     */
+    public function fetchOne(array $where,$withJoin = false)
+    {
+        $rows = $this->fetchAll($where,$withJoin,1);
+        return count($rows) ? $rows[0] : null;
     }
 
 }

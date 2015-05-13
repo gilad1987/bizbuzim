@@ -22,6 +22,10 @@ class Controller_Site_Users extends Controller_Users{
     public function signUp()
     {
         $user = $this->preSignUp();
+        if($user==null){
+            return array('error'=>array('msg'=>'user exist'));
+        }
+
         $user->insertOrUpdate();
 
         return $user;

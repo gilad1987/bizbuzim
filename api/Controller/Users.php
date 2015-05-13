@@ -34,10 +34,30 @@ class Controller_Users extends Controller{
         $user->email = $post['email'];
         $user->status = self::STATUS_CONFIRM;
 
+        if(!$this->isExist($user)){
+            return null;
+        }
+
         return $user;
     }
 
-    protected function signUpValidation(array &$post){
+    /**
+     * @param Model_DbTable_Base $user
+     * @return bool
+     */
+    private function isExist(Model_DbTable_Base $user){
+        $terms = array(
+            $user->getTableName() => array('email'=>$user->email)
+        );
+        return $user->fetchOne($terms) == null;
+    }
+
+    /**
+     * @param array $post
+     * @return array
+     * @throws RestException
+     */
+    private function signUpValidation(array &$post){
 
         $validations = array(
             'first_name'=>'anything',
