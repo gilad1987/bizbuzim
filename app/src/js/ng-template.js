@@ -1,38 +1,56 @@
 (function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
+try { module = angular.module("Bizbuzim"); }
+catch(err) { module = angular.module("Bizbuzim", []); }
 module.run(["$templateCache", function($templateCache) {
   "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/add-project.tpl.html",
-    "<div class=\"add-task-modal-wrapper ltr\">\n" +
+  $templateCache.put("app/src/js/Auth/auth.tpl.html",
+    "<div class=\"form\">\n" +
     "\n" +
-    "    <h2>Add New Project</h2>\n" +
+    "    <ul class=\"tab-group\">\n" +
+    "        <li class=\"tab \"><a href=\"#signup\">Sign Up</a></li>\n" +
+    "        <li class=\"tab active\"><a href=\"#login\">Log In</a></li>\n" +
+    "    </ul>\n" +
     "\n" +
-    "    <form name=\"projectForm\">\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <label class=\"label-text-input\">Name:</label>\n" +
-    "            <input name=\"name\" value=\"\" ng-model=\"name\" class=\"input\">\n" +
+    "    <div class=\"tab-content\">\n" +
     "\n" +
-    "            <div class=\"clearfix\"></div>\n" +
+    "        <div ng-include=\"'app/src/js/Auth/tpl/login.tpl.html'\" class=\"tabs\"></div>\n" +
+    "        <div ng-include=\"'app/src/js/Auth/tpl/signup.tpl.html'\" class=\"tabs\"></div>\n" +
+    "\n" +
+    "    </div><!-- tab-content -->\n" +
+    "\n" +
+    "</div> <!-- /form -->");
+}]);
+})();
+
+(function(module) {
+try { module = angular.module("Bizbuzim"); }
+catch(err) { module = angular.module("Bizbuzim", []); }
+module.run(["$templateCache", function($templateCache) {
+  "use strict";
+  $templateCache.put("app/src/js/Auth/tpl/login.tpl.html",
+    "<div id=\"login\" >\n" +
+    "    <h1>Welcome Back!</h1>\n" +
+    "\n" +
+    "    <form action=\"/\" method=\"post\">\n" +
+    "\n" +
+    "        <div class=\"field-wrap\">\n" +
+    "            <label>\n" +
+    "                Email Address<span class=\"req\">*</span>\n" +
+    "            </label>\n" +
+    "            <input type=\"email\"required autocomplete=\"off\"/>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <label class=\"label-text-input\">Description:</label>\n" +
-    "            <textarea name=\"description\" value=\"\" ng-model=\"description\" class=\"input\"></textarea>\n" +
-    "\n" +
-    "            <div class=\"clearfix\"></div>\n" +
+    "        <div class=\"field-wrap\">\n" +
+    "            <label>\n" +
+    "                Password<span class=\"req\">*</span>\n" +
+    "            </label>\n" +
+    "            <input type=\"password\"required autocomplete=\"off\"/>\n" +
     "        </div>\n" +
     "\n" +
+    "        <p class=\"forgot\"><a href=\"#\">Forgot Password?</a></p>\n" +
     "\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <label>Is done? : </label>\n" +
-    "            <label>Yes</label> <input type=\"radio\" name=\"done\" ng-model=\"done\" value=\"1\" />\n" +
-    "            <label>No</label> <input type=\"radio\" name=\"done\" ng-model=\"done\" value=\"0\" />\n" +
-    "        </div>\n" +
+    "        <button class=\"button button-block\">Log In</button>\n" +
     "\n" +
-    "        <br/>\n" +
-    "\n" +
-    "        <button value=\"\" class=\"\" ng-click=\"ProjectModalController.add(projectForm)\">send</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>");
@@ -40,171 +58,49 @@ module.run(["$templateCache", function($templateCache) {
 })();
 
 (function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
+try { module = angular.module("Bizbuzim"); }
+catch(err) { module = angular.module("Bizbuzim", []); }
 module.run(["$templateCache", function($templateCache) {
   "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/gt-projects-manager.tpl.html",
-    "<div class=\"main-container\">\n" +
+  $templateCache.put("app/src/js/Auth/tpl/signup.tpl.html",
+    "<div id=\"signup\" >\n" +
+    "    <h1>Sign Up for Free</h1>\n" +
     "\n" +
-    "    <div ui-view=\"projects\" class=\"project-list\"></div>\n" +
+    "    <form action=\"/\" method=\"post\">\n" +
     "\n" +
+    "        <div class=\"top-row\">\n" +
+    "            <div class=\"field-wrap\">\n" +
+    "                <label>\n" +
+    "                    First Name<span class=\"req\">*</span>\n" +
+    "                </label>\n" +
+    "                <input type=\"text\" required autocomplete=\"off\" />\n" +
+    "            </div>\n" +
     "\n" +
-    "    <div class=\"tasks-manage\">\n" +
-    "        <header class=\"title\">Tasks</header>\n" +
-    "        <div ui-view=\"tasks\" class=\"tasks\"></div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"clear\"></div>\n" +
-    "</div>");
-}]);
-})();
-
-(function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
-module.run(["$templateCache", function($templateCache) {
-  "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/partials/projects.tpl.html",
-    "<div class=\"\">\n" +
-    "\n" +
-    "    <header class=\"title\">Project manager</header>\n" +
-    "\n" +
-    "    <div ng-controller=\"cController as cCtrl\">\n" +
-    "\n" +
-    "        <input type=\"text\" class=\"filter\" placeholder=\"Search project ...\" ng-model=\"cCtrl.projectFilter.string\">\n" +
-    "\n" +
-    "        <ul>\n" +
-    "\n" +
-    "            <li ng-click=\"GtProjectManagerCtrl.addProject()\"><i class=\"glyphicon glyphicon-plus\"></i> Add project</li>\n" +
-    "\n" +
-    "            <li ng-repeat=\"project in GtProjectManagerCtrl.projects | filter:cCtrl.projectFilter.string\">\n" +
-    "                <a ng-href=\"{{project.url}}\">{{project.name}}</a>\n" +
-    "            </li>\n" +
-    "\n" +
-    "        </ul>\n" +
-    "\n" +
-    "    </div>\n" +
-    "\n" +
-    "</div>");
-}]);
-})();
-
-(function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
-module.run(["$templateCache", function($templateCache) {
-  "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/partials/tasks.tpl.html",
-    "<div ng-controller=\"TasksController as TasksCtrl\">\n" +
-    "\n" +
-    "    <button ng-click=\"TasksCtrl.api.addTask(TasksCtrl.project)\"><i class=\"glyphicon glyphicon-plus\"></i> Add new task</button>\n" +
-    "\n" +
-    "    <div gt-tasks-manager tasks=\"TasksCtrl.project.tasks\" api=\"TasksCtrl.api\"></div>\n" +
-    "\n" +
-    "</div>");
-}]);
-})();
-
-(function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
-module.run(["$templateCache", function($templateCache) {
-  "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/gt-tasks-manager/gt-tasks-manager.tpl.html",
-    "<div\n" +
-    "    ng-repeat=\"task in tasks track by $index\"\n" +
-    "    gt-task\n" +
-    "    task=\"task\"\n" +
-    "    api=\"api\">\n" +
-    "</div>");
-}]);
-})();
-
-(function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
-module.run(["$templateCache", function($templateCache) {
-  "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/gt-tasks-manager/gt-task/add-task.tpl.html",
-    "<div class=\"add-task-modal-wrapper ltr\">\n" +
-    "\n" +
-    "    <h2>Add New Task</h2>\n" +
-    "\n" +
-    "    <form name=\"taskForm\">\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <label class=\"label-text-input\">Name:</label>\n" +
-    "            <input name=\"name\" value=\"\" ng-model=\"name\" class=\"input\">\n" +
-    "\n" +
-    "            <div class=\"clearfix\"></div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <label class=\"label-text-input\">Description:</label>\n" +
-    "            <textarea name=\"description\" value=\"\" ng-model=\"description\" class=\"input\"></textarea>\n" +
-    "\n" +
-    "            <div class=\"clearfix\"></div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <label>Is done? : </label>\n" +
-    "            <label>Yes</label> <input type=\"radio\" name=\"done\" ng-model=\"done\" value=\"1\" />\n" +
-    "            <label>No</label> <input type=\"radio\" name=\"done\" ng-model=\"done\" value=\"0\" />\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <br/>\n" +
-    "\n" +
-    "        <button value=\"\" class=\"btn btn-success\" ng-click=\"TaskModalController.add(taskForm)\">send</button>\n" +
-    "    </form>\n" +
-    "\n" +
-    "</div>");
-}]);
-})();
-
-(function(module) {
-try { module = angular.module("ProjectsManager"); }
-catch(err) { module = angular.module("ProjectsManager", []); }
-module.run(["$templateCache", function($templateCache) {
-  "use strict";
-  $templateCache.put("app/src/js/gt-projects-manager/gt-tasks-manager/gt-task/gt-task.tpl.html",
-    "<div class=\"box none-border\">\n" +
-    "\n" +
-    "    <div class=\"box\">\n" +
-    "\n" +
-    "        <button class=\"btn btn-primary glyphicon glyphicon-plus btn-xs add-task-btn\" ng-click=\"GtTaskCtrl.addTask(task)\"></button>\n" +
-    "        <button class=\"btn btn-danger glyphicon glyphicon-minus btn-xs add-task-btn\" ng-click=\"GtTaskCtrl.removeTask(task)\"></button>\n" +
-    "\n" +
-    "        <span class=\"bold\">Name:</span>\n" +
-    "        <span>{{task.name}}</span>\n" +
-    "\n" +
-    "        <div>\n" +
-    "            <span class=\"bold\">Is done? </span>\n" +
-    "            <span class=\"glyphicon\" ng-class=\"{'glyphicon-ok':task.isComplete,'glyphicon-remove':!task.isComplete}\"></span>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div>\n" +
-    "            <span class=\"bold\">ID</span>\n" +
-    "            <span>{{task.id}}</span>\n" +
-    "        </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "        <div>\n" +
-    "            <span class=\"bold\">Description</span>\n" +
-    "            <div>\n" +
-    "                {{task.description}}\n" +
+    "            <div class=\"field-wrap\">\n" +
+    "                <label>\n" +
+    "                    Last Name<span class=\"req\">*</span>\n" +
+    "                </label>\n" +
+    "                <input type=\"text\"required autocomplete=\"off\"/>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
     "\n" +
-    "    <div class=\"box child none-border\"\n" +
-    "         ng-repeat=\"task in task.tasks track by $index\"\n" +
-    "         gt-task\n" +
-    "         task=\"task\"\n" +
-    "         api=\"api\">\n" +
-    "    </div>\n" +
+    "        <div class=\"field-wrap\">\n" +
+    "            <label>\n" +
+    "                Email Address<span class=\"req\">*</span>\n" +
+    "            </label>\n" +
+    "            <input type=\"email\"required autocomplete=\"off\"/>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"field-wrap\">\n" +
+    "            <label>\n" +
+    "                Set A Password<span class=\"req\">*</span>\n" +
+    "            </label>\n" +
+    "            <input type=\"password\"required autocomplete=\"off\"/>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <button type=\"submit\" class=\"button button-block\">Get Started</button>\n" +
+    "\n" +
+    "    </form>\n" +
     "\n" +
     "</div>");
 }]);

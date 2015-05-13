@@ -1,3 +1,3 @@
 # tasks-manager
 
-http://giladt.com/projects-manager/
+http://giladt.com/bizbuzim/

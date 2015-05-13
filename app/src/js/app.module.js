@@ -1,7 +1,9 @@
 (function () {
 
     angular.module('Bizbuzim',[
-        'ui.router'
+        'ui.router',
+        'auth'
     ]);
 
 })();
+

@@ -150,7 +150,7 @@ gulp.task('watch:sass', function() {
 /* ------------------------------------- scss --------------------------------------------*/
 var sass = require('gulp-sass');
 gulp.task('sass', function () {
-    gulp.src('app/src/scss/*.scss')
+    gulp.src(['app/src/*.scss','app/src/**/*.scss'])
         .pipe(sass())
         .pipe(gulp.dest('app/src/css'));
 });
