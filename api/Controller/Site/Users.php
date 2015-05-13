@@ -28,7 +28,7 @@ class Controller_Site_Users extends Controller_Users{
 
         $user->insertOrUpdate();
 
-        return $user;d
+        return $user;
     }
 
 }
