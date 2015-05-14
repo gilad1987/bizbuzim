@@ -9,14 +9,6 @@
 class Controller_Site_Users extends Controller_Users{
 
     /**
-     * @url GET /
-     */
-    public function index()
-    {
-        return 'user model';
-    }
-
-    /**
      * @url POST /
      */
     public function signUp()
@@ -29,6 +21,13 @@ class Controller_Site_Users extends Controller_Users{
         $user->insertOrUpdate();
 
         return $user;
+    }
+
+    /**
+     * @return bool
+     */
+    public function authorize(){
+        return true || $this->csrfIsValid();
     }
 
 }

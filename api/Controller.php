@@ -27,4 +27,8 @@ Class Controller
 
     	return  $modelName;
     }
+
+    public function csrfIsValid(){
+        return $this->_http->isXHR() && CSRFUtil::getInstance()->isValid();
+    }
 }

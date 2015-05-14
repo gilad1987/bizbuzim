@@ -10,14 +10,17 @@ class Controller_Admin_Users extends Controller_Users{
 
     public function authorize()
     {
-        return true;
+        $user = $this->getLogin();
+        return ($user != null && $user->permission == Controller_Users::PERMISSION_ADMIN);
     }
 
     /**
-     * @url POST /
+     * @url GET /
      */
-    public function _signUp()
+    public function index()
     {
-        return $this->signUp();
+        return $this->getAll();
     }
+
+
 }

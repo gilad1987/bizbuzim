@@ -91,7 +91,15 @@ gulp.task('js_css_injector:developer', function() {
                 tag = "<script src='<filename>'></script>";
             }
 
-            return tag.replace("<filename>",''+filepath+'?v='+VERSION);
+            function getRandomVersion(){
+                var min,max;
+                min=0; max=9999;
+
+                return (Math.floor(Math.random() * (max - min + 1)) + min);
+
+            }
+
+            return tag.replace("<filename>",''+filepath+'?v='+getRandomVersion());
         }
     };
 

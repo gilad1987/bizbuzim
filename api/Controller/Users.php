@@ -8,8 +8,10 @@
 
 class Controller_Users extends Controller{
 
-    const PERMISSION_ADMIN = 2;
-    const PERMISSION_SITE = 2;
+
+    const PERMISSION_PUBLIC = 1;
+    const PERMISSION_USER= 2;
+    const PERMISSION_ADMIN = 3;
 
     const STATUS_CONFIRM = 2;
     const STATUS_NOT_CONFIRM = 1;
@@ -30,7 +32,7 @@ class Controller_Users extends Controller{
         $user->first_name = $post['first_name'];
         $user->last_name = $post['last_name'];
         $user->password = $post['password'];
-        $user->permission = self::PERMISSION_ADMIN;
+        $user->permission = self::PERMISSION_USER;
         $user->email = $post['email'];
         $user->status = self::STATUS_CONFIRM;
 
@@ -75,5 +77,23 @@ class Controller_Users extends Controller{
         }
 
         return $validator->sanitize($post);
+    }
+
+
+    /**
+     * @return Model_DbTable_Users|null
+     */
+    public function getLogin()
+    {
+        #TODO IMPLEMENT
+        if(true){
+            return null;
+        }
+        return new Model_DbTable_Users();
+    }
+
+    protected function getAll(){
+        $model = new Model_DbTable_Users();
+        return $model->fetchAll();
     }
 }

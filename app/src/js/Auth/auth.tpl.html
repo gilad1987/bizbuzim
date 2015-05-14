@@ -1,14 +1,15 @@
 <div class="form">
 
     <ul class="tab-group">
-        <li class="tab "><a href="#signup">Sign Up</a></li>
-        <li class="tab active"><a href="#login">Log In</a></li>
+        <li class="tab" ><a ui-sref="user.login" ui-sref-active="active">Log In</a></li>
+        <li class="tab"><a ui-sref="user.signup" ui-sref-active="active">Sign Up</a></li>
     </ul>
 
     <div class="tab-content">
 
-        <div ng-include="'app/src/js/Auth/tpl/login.tpl.html'" class="tabs"></div>
-        <div ng-include="'app/src/js/Auth/tpl/signup.tpl.html'" class="tabs"></div>
+        <div class="tabs">
+            <div ui-view></div>
+        </div>
 
     </div><!-- tab-content -->
 

@@ -1,21 +1,21 @@
-<div id="signup" >
+<div id="signup" class="active" ng-controller="SignUpController as SignUpCtrl">
     <h1>Sign Up for Free</h1>
 
-    <form action="/" method="post">
+    <form action="/" method="post" name="SignUpForm" novalidate>
 
         <div class="top-row">
             <div class="field-wrap">
                 <label>
                     First Name<span class="req">*</span>
                 </label>
-                <input type="text" required autocomplete="off" />
+                <input type="text" required autocomplete="off" ng-model="user.first_name" name="first_name"/>
             </div>
 
             <div class="field-wrap">
                 <label>
                     Last Name<span class="req">*</span>
                 </label>
-                <input type="text"required autocomplete="off"/>
+                <input type="text"required autocomplete="off" ng-model="user.last_name" name="last_name"/>
             </div>
         </div>
 
@@ -23,17 +23,17 @@
             <label>
                 Email Address<span class="req">*</span>
             </label>
-            <input type="email"required autocomplete="off"/>
+            <input type="email"required autocomplete="off" ng-model="user.email" name="email"/>
         </div>
 
         <div class="field-wrap">
             <label>
                 Set A Password<span class="req">*</span>
             </label>
-            <input type="password"required autocomplete="off"/>
+            <input type="password"required autocomplete="off" ng-model="user.password" name="password" min="6" max="10" integer/>
         </div>
 
-        <button type="submit" class="button button-block">Get Started</button>
+        <button type="button" class="button button-block" ng-click="SignUpCtrl.send(SignUpForm)">Get Started</button>
 
     </form>
 

@@ -72,14 +72,14 @@ a {
       color:$white;
     }
   }
-  .active a {
+  a.active  {
     background:$main;
     color:$white;
   }
 }
 
 .tab-content > div:last-child {
-  display:none;
+//  display:none;
 }
 
 

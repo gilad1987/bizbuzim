@@ -8,4 +8,5 @@
 
 class Model_Admin_Users extends Model_DbTable_Users {
 
+
 }

@@ -16,10 +16,10 @@
             //controllerAs: 'AuthCtrl',
             link:function(scope,element,attrs){
 
+                function initBinding(){
 
-                function onTimeout(){
+                    element.find('input, textarea').on('keyup blur focus', function (e) {
 
-                    $(element).find('input, textarea').on('keyup blur focus', function (e) {
 
                         var $this = $(this),
                             label = $this.prev('label');
@@ -48,25 +48,46 @@
 
                     });
 
+                    //var documentForms = document.forms;
+                    //
+                    //for(var i = 0; i < documentForms.length; i++){
+                    //    for(var j = 0; j < documentForms[i].elements.length; j++){
+                    //        var input = documentForms[i].elements[j];
+                    //
+                    //        if(input.type == "text" || input.type == "password" || input.type == "email" || input.type == null){
+                    //            var text = input.value;
+                    //            input.focus();
+                    //            var event = document.createEvent('TextEvent');
+                    //            event.initTextEvent('textInput', true, true, window, 'a');
+                    //            input.dispatchEvent(event);
+                    //            input.value = text;
+                    //            input.blur();
+                    //        }
+                    //    }
+                    //}
+
                 }
 
-                $timeout(onTimeout,0,false);
-
-
-                $(element).find('.tab a').on('click', function (e) {
-
-                        e.preventDefault();
-
-                        $(this).parent().addClass('active');
-                        $(this).parent().siblings().removeClass('active');
-
-                        target = $(this).attr('href');
-
-                        $('.tab-content .tabs').not(target).hide();
-
-                        $(target).parent().fadeIn(600);
-
+                scope.$on('$stateChangeSuccess',
+                    function(event, toState, toParams, fromState, fromParams){
+                        initBinding();
                 });
+                initBinding();
+
+                //element.parent().find('.tab a').on('click', function (e) {
+                //
+                //        e.preventDefault();
+                //
+                //        $(this).parent().addClass('active');
+                //        $(this).parent().siblings().removeClass('active');
+                //
+                //        target = $(this).attr('href');
+                //
+                //        $('.tab-content .tabs').not(target).hide();
+                //
+                //        $(target).parent().fadeIn(600);
+                //
+                //});
 
 
             }
