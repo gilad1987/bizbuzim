@@ -4,16 +4,20 @@
 
 (function () {
 
-
-    function SignUpController()
+    function SignUpController(AuthService)
     {
         this.user = {};
+
+        this.send = function(SignUpForm){
+
+            if(SignUpForm.$valid){
+                AuthService.signUp(this.user);
+            }
+        };
     }
 
-    SignUpController.prototype.send = function(SignUpForm){
-        console.log(SignUpForm);
-    };
 
-    angular.module('auth').controller('SignUpController',[SignUpController]);
+
+    angular.module('auth').controller('SignUpController',['AuthService',SignUpController]);
 
 })();

@@ -19,6 +19,16 @@
                     });
             };
 
+            authService.signUp = function (user) {
+                return $http
+                    .post('/signup', user)
+                    .then(function (res) {
+                        Session.create(res.data.id, res.data.user.id,
+                            res.data.user.role);
+                        return res.data.user;
+                    });
+            };
+
             authService.isAuthenticated = function () {
                 return !!Session.userId;
             };

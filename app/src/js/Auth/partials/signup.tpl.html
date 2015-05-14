@@ -8,14 +8,14 @@
                 <label>
                     First Name<span class="req">*</span>
                 </label>
-                <input type="text" required autocomplete="off" ng-model="user.first_name" name="first_name"/>
+                <input type="text" required autocomplete="off" ng-model="SignUpCtrl.user.first_name" name="first_name"/>
             </div>
 
             <div class="field-wrap">
                 <label>
                     Last Name<span class="req">*</span>
                 </label>
-                <input type="text"required autocomplete="off" ng-model="user.last_name" name="last_name"/>
+                <input type="text" required autocomplete="off" ng-model="SignUpCtrl.user.last_name" name="last_name"/>
             </div>
         </div>
 
@@ -23,14 +23,14 @@
             <label>
                 Email Address<span class="req">*</span>
             </label>
-            <input type="email"required autocomplete="off" ng-model="user.email" name="email"/>
+            <input type="email" required autocomplete="off" ng-model="SignUpCtrl.user.email" name="email"/>
         </div>
 
         <div class="field-wrap">
             <label>
                 Set A Password<span class="req">*</span>
             </label>
-            <input type="password"required autocomplete="off" ng-model="user.password" name="password" min="6" max="10" integer/>
+            <input type="password" required autocomplete="off" ng-model="SignUpCtrl.user.password" name="password"/>
         </div>
 
         <button type="button" class="button button-block" ng-click="SignUpCtrl.send(SignUpForm)">Get Started</button>

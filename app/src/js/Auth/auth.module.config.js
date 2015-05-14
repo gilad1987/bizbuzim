@@ -21,7 +21,7 @@
                 url: '/',
                 views:{
                     "@":{
-                        template: '<h1>welcome</h1> <div style="text-align: center"><h2><a ui-sref="user.login">SignUp</a></h2></div>'
+                        template: '<h1>welcome</h1> <div style="text-align: center"><h2><a ui-sref="user.private.signup">SignUp</a></h2></div>'
                     }
                 }
 
@@ -33,12 +33,32 @@
                 abstract: true,
                 views:{
                     "@":{
-                        template: '<div gt-auth></div>'
+                        template: '<div ui-view></div>'
                     }
                 }
             })
 
-            .state('user.login', {
+            .state('user.index', {
+                url: '/user',
+                views:{
+                    "":{
+                        template: '<h1>user logged</h1>'
+                    }
+                }
+
+            })
+
+            .state('user.private', {
+                url: '',
+                views:{
+                    "":{
+                        template: '<div gt-auth></div>'
+                    }
+                }
+
+            })
+
+            .state('user.private.login', {
                 url: '/login',
                 views:{
                     "":{
@@ -47,7 +67,8 @@
                 }
 
             })
-            .state('user.signup', {
+
+            .state('user.private.signup', {
                 url: '/signup',
                 views:{
                     "":{
