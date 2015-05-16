@@ -1,35 +1,29 @@
 (function () {
 
-    function Config($stateProvider, $urlRouterProvider, $locationProvider){
+    function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+    }
 
-        $urlRouterProvider.otherwise('/');
-        $urlRouterProvider.when("", "/signup");
+    function Config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
+
+        $httpProvider.defaults.headers.common['X-AuthToken'] = function(){
+            return 'token';
+        };
+
+
+        //$urlRouterProvider.when("", "/signup");
 
         //$locationProvider.html5Mode({
         //    enabled: true,
         //    requireBase: false
         //});
 
-        // public state
-        $stateProvider
-
-            .state('public', {
-                abstract: true,
-                templateUrl: "app/src/js/ng-templates/index.tpl.html"
-            })
-            .state('public.index', {
-                url: '/',
-                views:{
-                    "@":{
-                        template: '<h1>welcome</h1> <div style="text-align: center"><h2><a ui-sref="user.private.signup">SignUp</a></h2></div>'
-                    }
-                }
-
-            });
 
         // user state
         $stateProvider
-            .state('user', {
+            .state('auth', {
                 abstract: true,
                 views:{
                     "@":{
@@ -38,18 +32,8 @@
                 }
             })
 
-            .state('user.index', {
-                url: '/user',
-                views:{
-                    "":{
-                        template: '<h1>user logged</h1>'
-                    }
-                }
-
-            })
-
-            .state('user.private', {
-                url: '',
+            .state('auth.private', {
+                //url: '',
                 views:{
                     "":{
                         template: '<div gt-auth></div>'
@@ -58,7 +42,7 @@
 
             })
 
-            .state('user.private.login', {
+            .state('auth.private.login', {
                 url: '/login',
                 views:{
                     "":{
@@ -68,7 +52,7 @@
 
             })
 
-            .state('user.private.signup', {
+            .state('auth.private.signup', {
                 url: '/signup',
                 views:{
                     "":{
@@ -78,6 +62,6 @@
             });
     }
 
-    angular.module('auth').config(['$stateProvider','$urlRouterProvider','$locationProvider',Config]);
+    angular.module('auth').config(['$stateProvider','$urlRouterProvider','$locationProvider','$httpProvider',Config]);
 
 })();

@@ -25,10 +25,15 @@ Class Controller
             $modelName .= '_'.$ctrlNameArr[$i];
         }
 
-    	return  $modelName;
+
+    	return  substr($modelName, 0, -1);
     }
 
     public function csrfIsValid(){
-        return $this->_http->isXHR() && CSRFUtil::getInstance()->isValid();
+        return $this->_http->isXHR()  && CSRFUtil::getInstance()->isValid();
+    }
+
+    protected function encrypt($string){
+        return md5($string);
     }
 }

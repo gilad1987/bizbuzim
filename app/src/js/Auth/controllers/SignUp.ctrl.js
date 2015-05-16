@@ -4,20 +4,48 @@
 
 (function () {
 
-    function SignUpController(AuthService)
+    function SignUpController(AuthService,$rootScope,AUTH_EVENTS,$state)
     {
-        this.user = {};
+        var self = this;
+
+        this.user = {
+            email:'asd@asd.com',
+            first_name:'aS',
+            last_name:'as',
+            password:'123123'
+        };
+
+        this.errorMessages = null;
+        this.signUpSuccess = false;
 
         this.send = function(SignUpForm){
 
             if(SignUpForm.$valid){
-                AuthService.signUp(this.user);
+                function onSuccess(response){
+                    // user create new and login
+                    if(response.data.user){
+                        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess,response);
+                        $state.go('public.index');
+                    }else{
+                        self.signUpSuccess = true;
+                    }
+
+                    $rootScope.$broadcast(AUTH_EVENTS.signUpSuccess,response);
+                }
+                function onFail(reason){
+                    if(reason.data.error && reason.data.error.message && reason.data.error.message.sub){
+                        self.errorMessages = reason.data.error.message.sub;
+                    }
+                    $rootScope.$broadcast(AUTH_EVENTS.signUpFailed,reason);
+                }
+
+                AuthService.signUp(this.user).then(onSuccess,onFail);
             }
         };
     }
 
 
 
-    angular.module('auth').controller('SignUpController',['AuthService',SignUpController]);
+    angular.module('auth').controller('SignUpController',['AuthService','$rootScope','AUTH_EVENTS','$state',SignUpController]);
 
 })();

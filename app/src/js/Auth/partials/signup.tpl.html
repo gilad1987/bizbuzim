@@ -1,40 +1,53 @@
 <div id="signup" class="active" ng-controller="SignUpController as SignUpCtrl">
-    <h1>Sign Up for Free</h1>
 
-    <form action="/" method="post" name="SignUpForm" novalidate>
+    <div ng-if="SignUpCtrl.signUpSuccess" class="success-sign-up-message">
+        <h3>You received email to confirm account</h3>
+    </div>
 
-        <div class="top-row">
-            <div class="field-wrap">
-                <label>
-                    First Name<span class="req">*</span>
-                </label>
-                <input type="text" required autocomplete="off" ng-model="SignUpCtrl.user.first_name" name="first_name"/>
+    <div ng-if="!SignUpCtrl.signUpSuccess">
+
+        <h1>Sign Up for Free</h1>
+
+        <form action="/" method="post" name="SignUpForm" novalidate>
+
+            <div class="top-row">
+                <div class="field-wrap">
+                    <label>
+                        First Name<span class="req">*</span>
+                    </label>
+                    <input type="text" required autocomplete="off" ng-model="SignUpCtrl.user.first_name" name="first_name"/>
+                </div>
+
+                <div class="field-wrap">
+                    <label>
+                        Last Name<span class="req">*</span>
+                    </label>
+                    <input type="text" required autocomplete="off" ng-model="SignUpCtrl.user.last_name" name="last_name"/>
+                </div>
             </div>
 
             <div class="field-wrap">
                 <label>
-                    Last Name<span class="req">*</span>
+                    Email Address<span class="req">*</span>
                 </label>
-                <input type="text" required autocomplete="off" ng-model="SignUpCtrl.user.last_name" name="last_name"/>
+                <input type="email" required autocomplete="off" ng-model="SignUpCtrl.user.email" name="email"/>
             </div>
-        </div>
 
-        <div class="field-wrap">
-            <label>
-                Email Address<span class="req">*</span>
-            </label>
-            <input type="email" required autocomplete="off" ng-model="SignUpCtrl.user.email" name="email"/>
-        </div>
+            <div class="field-wrap">
+                <label>
+                    Set A Password<span class="req">*</span>
+                </label>
+                <input type="password" required autocomplete="off" ng-model="SignUpCtrl.user.password" name="password"/>
+            </div>
 
-        <div class="field-wrap">
-            <label>
-                Set A Password<span class="req">*</span>
-            </label>
-            <input type="password" required autocomplete="off" ng-model="SignUpCtrl.user.password" name="password"/>
-        </div>
+            <ul ng-if="SignUpCtrl.errorMessages != null" class="errors">
+                <li ng-repeat="errorMessage in SignUpCtrl.errorMessages track by $index">{{errorMessage}}</li>
+            </ul>
+            <button type="button" class="button button-block" ng-click="SignUpCtrl.send(SignUpForm)">Get Started</button>
 
-        <button type="button" class="button button-block" ng-click="SignUpCtrl.send(SignUpForm)">Get Started</button>
+        </form>
 
-    </form>
+    </div>
+
 
 </div>

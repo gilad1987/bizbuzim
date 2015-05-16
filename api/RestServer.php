@@ -206,7 +206,14 @@ class RestServer
 			}
 		}
 		
-		$message = $this->codes[$statusCode] . ($errorMessage && $this->mode == 'debug' ? ': ' . $errorMessage : '');
+		$message = $this->codes[$statusCode]; //. ($errorMessage && $this->mode == 'debug' ? ': ' . $errorMessage : '');
+
+        if($errorMessage && $this->mode == 'debug'){
+            $message = array(
+                'body'=>$message,
+                'sub'=>json_decode($errorMessage)
+            );
+        }
 		
 		$this->setStatus($statusCode);
 		$this->sendData(array('error' => array('code' => $statusCode, 'message' => $message)));

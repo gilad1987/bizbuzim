@@ -1,6 +1,6 @@
 (function () {
 
-    function Session()
+    function User()
     {
 
         var user = null;
@@ -11,21 +11,20 @@
          * @constructor
          */
         function User(params){
-
             this.id = null;
-            this.userId = null;
             this.userRole = null;
-            this.image = null;
+            this.picture = null;
             this.first_name = null;
             this.last_name = null;
+            this.userRole = null;
 
             for(var key in params){
                 if(this.hasOwnProperty(key)){
                     this[key] = params[key];
                 }
             }
-
         }
+
 
         function $get(){
 
@@ -38,14 +37,14 @@
                 return true;
             }
 
-            function getLoggedUser(){
-                return getLoggedUser;
+            function get(){
+                return user;
             }
 
             return {
                 create:create,
                 destroy:destroy,
-                getLoggedUser:getLoggedUser
+                get:get
             }
 
         }
@@ -53,6 +52,6 @@
         this.$get = [$get];
     }
 
-    angular.module('auth').provider('Session',[Session]);
+    angular.module('auth').provider('User',[User]);
 
 })();

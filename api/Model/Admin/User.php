@@ -6,7 +6,7 @@
  * Time: 22:13
  */
 
-class Model_Admin_Users extends Model_DbTable_Users {
+class Model_Admin_User extends Model_DbTable_Users {
 
 
 }

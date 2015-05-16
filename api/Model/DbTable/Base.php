@@ -182,6 +182,7 @@ class Model_DbTable_Base {
             $types= "";
             foreach ($where as $tableName=>$fields){
                 $modelName = "Model_DbTable_".ucfirst($tableName);
+
                 $model = new $modelName();
                 foreach ($fields as $fieldName=>$val){
                     $types .= $model->fieldPDOTypeByName[$fieldName];
@@ -204,6 +205,7 @@ class Model_DbTable_Base {
         if($limit != null){
             $query .=" LIMIT {$start},{$limit}";
         }
+
 
         $conn = $this->getConn();
 
@@ -244,6 +246,7 @@ class Model_DbTable_Base {
         return $result;
     }
 
+
     /**
      * @desc $where = array("table_name"=>array("field_name"=>value))
      *
@@ -254,6 +257,7 @@ class Model_DbTable_Base {
      */
     public function fetchOne(array $where,$withJoin = false)
     {
+        #TODO App_Mysql_Exceptions
         $rows = $this->fetchAll($where,$withJoin,1);
         return count($rows) ? $rows[0] : null;
     }

@@ -8,51 +8,73 @@
 
 class Controller_Users extends Controller{
 
-
-    const PERMISSION_PUBLIC = 1;
-    const PERMISSION_USER= 2;
-    const PERMISSION_ADMIN = 3;
-
-    const STATUS_CONFIRM = 2;
-    const STATUS_NOT_CONFIRM = 1;
+    const COOKIE_NAME = 'SDFdsf098_sdf';
 
     /**
-     * @return Model_DbTable_Users
+     * @var Model_User | null
+     */
+    private static $loggedUser = null;
+
+    /**
+     * @return Model_User | null
+     */
+    public function getLogged(){
+        return self::$loggedUser;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(){
+        $this->getLogged() &&
+        self::$loggedUser->permission == Model_DbTable_Users::PERMISSION_ADMIN;
+    }
+
+    /**
+     * @return Model_User
      * @throws RestException
      */
-    protected function preSignUp()
+    protected function buildUserPreSignUp()
     {
         $post = $this->_http->getPost();
         $this->signUpValidation($post);
 
         $modelName = $this->getModel();
-
         $user = new $modelName();
 
         $user->first_name = $post['first_name'];
         $user->last_name = $post['last_name'];
-        $user->password = $post['password'];
-        $user->permission = self::PERMISSION_USER;
+        $user->password = $this->encrypt($post['password']);
+        $user->permission = Model_DbTable_Users::PERMISSION_USER;
         $user->email = $post['email'];
-        $user->status = self::STATUS_CONFIRM;
-
-        if(!$this->isExist($user)){
-            return null;
-        }
+        #TODO check status to STATUS_WAIT_TO_MAIL_CONFIRM
+        $user->status = Model_DbTable_Users::STATUS_CONFIRM;
 
         return $user;
     }
 
+
     /**
-     * @param Model_DbTable_Base $user
-     * @return bool
+     * @param Model_User $user
+     * @param array $fieldsToCheck
+     * @return bool| Model_User
      */
-    private function isExist(Model_DbTable_Base $user){
+    protected function isExist(Model_User $user, $fieldsToCheck = array()){
+
         $terms = array(
-            $user->getTableName() => array('email'=>$user->email)
+            $user->getTableName() => (!empty($fieldsToCheck) ? $fieldsToCheck : array('email'=>$user->email))
         );
-        return $user->fetchOne($terms) == null;
+        $row = $user->fetchOne($terms);
+        $_user =new Model_User();
+        foreach($user as $key=>$val){
+            if(isset($row->$key)){
+                $_user->$key = $row->$key;
+            }
+        }
+
+        return $row == null ? false : $_user;
     }
+
 
     /**
      * @param array $post
@@ -73,8 +95,9 @@ class Controller_Users extends Controller{
         $validator = new FormValidator($validations, $required, $sanitize);
 
         if( !$validator->validate($post) ){
-          throw new RestException(400);
+          throw new RestException(200,json_encode($validator->getErrors()));
         }
+
 
         return $validator->sanitize($post);
     }
@@ -83,7 +106,7 @@ class Controller_Users extends Controller{
     /**
      * @return Model_DbTable_Users|null
      */
-    public function getLogin()
+    public function get()
     {
         #TODO IMPLEMENT
         if(true){
@@ -95,5 +118,19 @@ class Controller_Users extends Controller{
     protected function getAll(){
         $model = new Model_DbTable_Users();
         return $model->fetchAll();
+    }
+
+
+    /**
+     * @param Model_User $user
+     * @return Model_User
+     */
+    public function login(Model_User $user){
+
+        $user->session = md5($user->email.uniqid(rand(1,987987987)));
+        setcookie(Controller_Users::COOKIE_NAME,$user->session,null,null,'/');
+        $user->insertOrUpdate();
+        return $user;
+
     }
 }

@@ -7,8 +7,8 @@ module.run(["$templateCache", function($templateCache) {
     "<div class=\"form\">\n" +
     "\n" +
     "    <ul class=\"tab-group\">\n" +
-    "        <li class=\"tab\" ><a ui-sref=\"user.private.login\" ui-sref-active=\"active\">Log In</a></li>\n" +
-    "        <li class=\"tab\"><a ui-sref=\"user.private.signup\" ui-sref-active=\"active\">Sign Up</a></li>\n" +
+    "        <li class=\"tab\" ><a ui-sref=\"auth.private.login\" ui-sref-active=\"active\">Log In</a></li>\n" +
+    "        <li class=\"tab\"><a ui-sref=\"auth.private.signup\" ui-sref-active=\"active\">Sign Up</a></li>\n" +
     "    </ul>\n" +
     "\n" +
     "    <div class=\"tab-content\">\n" +
@@ -76,43 +76,56 @@ module.run(["$templateCache", function($templateCache) {
   "use strict";
   $templateCache.put("app/src/js/Auth/partials/signup.tpl.html",
     "<div id=\"signup\" class=\"active\" ng-controller=\"SignUpController as SignUpCtrl\">\n" +
-    "    <h1>Sign Up for Free</h1>\n" +
     "\n" +
-    "    <form action=\"/\" method=\"post\" name=\"SignUpForm\" novalidate>\n" +
+    "    <div ng-if=\"SignUpCtrl.signUpSuccess\" class=\"success-sign-up-message\">\n" +
+    "        <h3>You received email to confirm account</h3>\n" +
+    "    </div>\n" +
     "\n" +
-    "        <div class=\"top-row\">\n" +
-    "            <div class=\"field-wrap\">\n" +
-    "                <label>\n" +
-    "                    First Name<span class=\"req\">*</span>\n" +
-    "                </label>\n" +
-    "                <input type=\"text\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.first_name\" name=\"first_name\"/>\n" +
+    "    <div ng-if=\"!SignUpCtrl.signUpSuccess\">\n" +
+    "\n" +
+    "        <h1>Sign Up for Free</h1>\n" +
+    "\n" +
+    "        <form action=\"/\" method=\"post\" name=\"SignUpForm\" novalidate>\n" +
+    "\n" +
+    "            <div class=\"top-row\">\n" +
+    "                <div class=\"field-wrap\">\n" +
+    "                    <label>\n" +
+    "                        First Name<span class=\"req\">*</span>\n" +
+    "                    </label>\n" +
+    "                    <input type=\"text\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.first_name\" name=\"first_name\"/>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"field-wrap\">\n" +
+    "                    <label>\n" +
+    "                        Last Name<span class=\"req\">*</span>\n" +
+    "                    </label>\n" +
+    "                    <input type=\"text\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.last_name\" name=\"last_name\"/>\n" +
+    "                </div>\n" +
     "            </div>\n" +
     "\n" +
     "            <div class=\"field-wrap\">\n" +
     "                <label>\n" +
-    "                    Last Name<span class=\"req\">*</span>\n" +
+    "                    Email Address<span class=\"req\">*</span>\n" +
     "                </label>\n" +
-    "                <input type=\"text\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.last_name\" name=\"last_name\"/>\n" +
+    "                <input type=\"email\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.email\" name=\"email\"/>\n" +
     "            </div>\n" +
-    "        </div>\n" +
     "\n" +
-    "        <div class=\"field-wrap\">\n" +
-    "            <label>\n" +
-    "                Email Address<span class=\"req\">*</span>\n" +
-    "            </label>\n" +
-    "            <input type=\"email\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.email\" name=\"email\"/>\n" +
-    "        </div>\n" +
+    "            <div class=\"field-wrap\">\n" +
+    "                <label>\n" +
+    "                    Set A Password<span class=\"req\">*</span>\n" +
+    "                </label>\n" +
+    "                <input type=\"password\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.password\" name=\"password\"/>\n" +
+    "            </div>\n" +
     "\n" +
-    "        <div class=\"field-wrap\">\n" +
-    "            <label>\n" +
-    "                Set A Password<span class=\"req\">*</span>\n" +
-    "            </label>\n" +
-    "            <input type=\"password\" required autocomplete=\"off\" ng-model=\"SignUpCtrl.user.password\" name=\"password\"/>\n" +
-    "        </div>\n" +
+    "            <ul ng-if=\"SignUpCtrl.errorMessages != null\" class=\"errors\">\n" +
+    "                <li ng-repeat=\"errorMessage in SignUpCtrl.errorMessages track by $index\">{{errorMessage}}</li>\n" +
+    "            </ul>\n" +
+    "            <button type=\"button\" class=\"button button-block\" ng-click=\"SignUpCtrl.send(SignUpForm)\">Get Started</button>\n" +
     "\n" +
-    "        <button type=\"button\" class=\"button button-block\" ng-click=\"SignUpCtrl.send(SignUpForm)\">Get Started</button>\n" +
+    "        </form>\n" +
     "\n" +
-    "    </form>\n" +
+    "    </div>\n" +
+    "\n" +
     "\n" +
     "</div>");
 }]);

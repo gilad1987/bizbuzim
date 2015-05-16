@@ -70,26 +70,9 @@
 
                 scope.$on('$stateChangeSuccess',
                     function(event, toState, toParams, fromState, fromParams){
-                        initBinding();
+                        $timeout(initBinding,0);
                 });
-                initBinding();
-
-                //element.parent().find('.tab a').on('click', function (e) {
-                //
-                //        e.preventDefault();
-                //
-                //        $(this).parent().addClass('active');
-                //        $(this).parent().siblings().removeClass('active');
-                //
-                //        target = $(this).attr('href');
-                //
-                //        $('.tab-content .tabs').not(target).hide();
-                //
-                //        $(target).parent().fadeIn(600);
-                //
-                //});
-
-
+                $timeout(initBinding,0);
             }
         };
     }

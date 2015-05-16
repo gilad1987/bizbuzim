@@ -29,14 +29,14 @@ class CSRFUtil
 
     private function __construct()
     {
-        $this->_session = App_Session::getInstance();
-        $this->_http = App_Http::getInstance();
+        $this->_session = Session::getInstance();
+        $this->_http = Http::getInstance();
     }
 
     private function set()
 	{
         $session_name = $this->_session_token_name;
-        $token =  md5(time().uniqid().rand(1,10));
+        $token =  md5(time().uniqid().rand(1,9989897987));
         return $this->_token = $this->_session->$session_name = $token;
     }
 
@@ -49,8 +49,15 @@ class CSRFUtil
 
     public function isValid(){
         $session_name = $this->_session_token_name;
-        $t = isset($_SERVER['X-XSRF-TOKEN']) ? $_SERVER['X-XSRF-TOKEN'] : null;
+        $t = isset($_SERVER['HTTP_X_AUTHTOKEN']) ? $_SERVER['HTTP_X_AUTHTOKEN'] : null;
+
+        #TODO checking
+        if($t == 'token'){
+            return true;
+        }
         $st = $this->_session->$session_name;
         return ($t == $st) && preg_match('/([a-zA-Z0-9]){32}/i', "{$st}", $result);
     }
 }
+
+
