@@ -26,6 +26,7 @@ class Model_DbTable_Users extends Model_DbTable_Base{
     public $picture;
     public $session;
     public $registration_token;
+    public $userRole;
 
     public function __construct()
     {

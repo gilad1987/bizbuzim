@@ -28,6 +28,7 @@
                         onFail(response);
                     }
                     if(response.data.user){
+                        response.data.user.authToken = response.data.token;
                         User.create(response.data.user);
                     }
                     deferred.resolve(response);

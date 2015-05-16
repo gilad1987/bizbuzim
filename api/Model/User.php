@@ -13,4 +13,12 @@ class Model_User extends Model_DbTable_Users{
         parent::__construct();
     }
 
+    public function cleanOutput(){
+        unset($this->registration_token);
+        unset($this->session);
+        unset($this->status);
+        unset($this->password);
+        unset($this->permission);
+        return $this;
+    }
 }

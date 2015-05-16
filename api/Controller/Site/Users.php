@@ -22,24 +22,19 @@ class Controller_Site_Users extends Controller_Users{
         $fieldsToCheck = array(
             'email'=>$user->email
         );
-        $user_exist = $this->isExist($user,$fieldsToCheck);
+        $userExist = $this->isExist($user,$fieldsToCheck);
 
         $response = new stdClass();
-        if($user_exist != null){
-            if($this->encrypt($user_exist->password) != $this->encrypt($user->password)){
-                $response->success = false;
+        if($userExist != null){
+            if($this->encrypt($userExist->password) != $this->encrypt($user->password)){
+//                $response->success = false;
                 $response->message = 'Mail already exist';
                 throw new RestException(200,json_encode($response));
 
             }
-            $this->login($user_exist);
-            $response->user = new stdClass();
-            $response->user->first_name = $user_exist->first_name;
-            $response->user->userRole = $user_exist->permission;
-            $response->user->last_name = $user_exist->last_name;
-            $response->user->id = $user_exist->id;
-            $response->user->picture = $user_exist->picture;
-
+            $this->login($userExist);
+            $userExist->userRole = $userExist->permission;
+            $response->user = $userExist->cleanOutput();
             $response->token = CSRFUtil::getInstance()->getToken(true);
 
             return $response;

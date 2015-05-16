@@ -16,7 +16,7 @@
             this.picture = null;
             this.first_name = null;
             this.last_name = null;
-            this.userRole = null;
+            this.authToken = null;
 
             for(var key in params){
                 if(this.hasOwnProperty(key)){
@@ -41,10 +41,15 @@
                 return user;
             }
 
+            function getAuthToken(){
+                return user.authToken;
+            }
+
             return {
                 create:create,
                 destroy:destroy,
-                get:get
+                get:get,
+                getAuthToken:getAuthToken
             }
 
         }
