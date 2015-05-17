@@ -259,6 +259,11 @@ class Model_DbTable_Base {
     {
         #TODO App_Mysql_Exceptions
         $rows = $this->fetchAll($where,$withJoin,1);
+//        foreach($rows[0] as $key=>$val){
+//            if(isset($this->$key)){
+//                $this->$key = $rows[0]->$key;
+//            }
+//        }
         return count($rows) ? $rows[0] : null;
     }
 

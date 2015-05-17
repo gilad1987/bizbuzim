@@ -15,7 +15,7 @@ class Controller_Site_Users extends Controller_Users{
     public function signUp()
     {
         if(!$this->csrfIsValid()){
-            throw new RestException(200,json_encode(array('msg'=>'invalid auth')));
+            throw new RestException(200,json_encode(array('msg'=>'Invalid auth')));
         }
 
         $user = $this->buildUserPreSignUp();
