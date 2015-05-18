@@ -8,12 +8,7 @@ Class Controller
         $this->_http = Http::getInstance();
     }
 
-    
-    public function indexAction()
-    {
-
-    }
-
+    public function index(){}
 
     protected function getModel()
     {

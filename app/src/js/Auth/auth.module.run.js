@@ -2,7 +2,6 @@
 
     function Run()
     {
-console.log('auth - run');
 
     }
 

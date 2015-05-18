@@ -6,7 +6,7 @@
  * Time: 23:42
  */
 
-class Controller_Users extends Controller{
+class Controller_Users extends Controller_Base{
 
     const COOKIE_NAME = 'SDFdsf098_sdf';
 
@@ -64,15 +64,10 @@ class Controller_Users extends Controller{
         $terms = array(
             $user->getTableName() => (!empty($fieldsToCheck) ? $fieldsToCheck : array('email'=>$user->email))
         );
-        $row = $user->fetchOne($terms);
-        $_user =new Model_User();
-        foreach($user as $key=>$val){
-            if(isset($row->$key)){
-                $_user->$key = $row->$key;
-            }
-        }
+        $userExist = new Model_User();
+        $userExist = $userExist->fetchOne($terms);
 
-        return $row == null ? false : $_user;
+        return $userExist == null ? false : $userExist;
     }
 
 
@@ -124,9 +119,13 @@ class Controller_Users extends Controller{
     /**
      * @param Model_User $user
      * @return Model_User
+     * @throws exception
      */
-    public function login(Model_User $user){
+    protected function login(Model_User $user){
 
+        if(!isset($user->id)){
+            throw new exception('invalid user to login - missing id');
+        }
         $user->session = md5($user->email.uniqid(rand(1,987987987)));
         setcookie(Controller_Users::COOKIE_NAME,$user->session,null,null,'/');
         $user->insertOrUpdate();

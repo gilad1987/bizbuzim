@@ -4,7 +4,7 @@ catch(err) { module = angular.module("Bizbuzim", []); }
 module.run(["$templateCache", function($templateCache) {
   "use strict";
   $templateCache.put("app/src/js/Auth/auth.tpl.html",
-    "<div class=\"form\">\n" +
+    "<div class=\"form auth\">\n" +
     "\n" +
     "    <ul class=\"tab-group\">\n" +
     "        <li class=\"tab\" ><a ui-sref=\"auth.private.login\" ui-sref-active=\"active\">Log In</a></li>\n" +
@@ -20,6 +20,56 @@ module.run(["$templateCache", function($templateCache) {
     "    </div><!-- tab-content -->\n" +
     "\n" +
     "</div> <!-- /form -->");
+}]);
+})();
+
+(function(module) {
+try { module = angular.module("Bizbuzim"); }
+catch(err) { module = angular.module("Bizbuzim", []); }
+module.run(["$templateCache", function($templateCache) {
+  "use strict";
+  $templateCache.put("app/src/js/Dashboard/inedx.tpl.html",
+    "<div style=\"display: none\">\n" +
+    "    <h1>welcome</h1> <div style=\"text-align: center\"><h2><a ui-sref=\"auth.private.signup\">SignUp</a></h2></div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<div class=\"site dashboard-wrapper\">\n" +
+    "    <div class=\"menu years align-right\">\n" +
+    "        <ul>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2008</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2009</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2010</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2011</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2012</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2013</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2014</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2015</a></li>\n" +
+    "        </ul>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"year-content align-right\">\n" +
+    "        <ul class=\"menu month\">\n" +
+    "            <li><a href=\"#\" class=\"button small\" title=\"2010\">פבואר</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button secondary small\" title=\"2010\">מרץ</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button  small\" title=\"2010\">אפריל</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button  small\" title=\"2010\">מאי</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button  small\" title=\"2010\">יוני</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button  small\" title=\"2010\">יולי</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button  small\" title=\"2010\">אוגוסט</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button  small\" title=\"2010\">ספטמבר</a></li>\n" +
+    "        </ul>\n" +
+    "\n" +
+    "        <div class=\"clear\"></div>\n" +
+    "\n" +
+    "        <div class=\"month-content\">\n" +
+    "            month-content\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"clear\"></div>\n" +
+    "</div>");
 }]);
 })();
 

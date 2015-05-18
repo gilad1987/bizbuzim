@@ -178,7 +178,7 @@ class Model_DbTable_Base {
         if(!empty($where)){
             $whereQuery = ' WHERE';
             $fileds =array();
-            $fileds_ref =array();
+            $fields_ref =array();
             $types= "";
             foreach ($where as $tableName=>$fields){
                 $modelName = "Model_DbTable_".ucfirst($tableName);
@@ -186,14 +186,14 @@ class Model_DbTable_Base {
                 $model = new $modelName();
                 foreach ($fields as $fieldName=>$val){
                     $types .= $model->fieldPDOTypeByName[$fieldName];
-                    $fileds_ref[] = $val;
+                    $fields_ref[] = $val;
                     $whereQuery .= " `$tableName`.`$fieldName` = ? AND";
                 }
             }
             $whereQuery = trim($whereQuery,"AND");
 
-// 			for ($i=0; $i<count($fileds_ref); $i++){
-// 				$fileds[] = &$fileds_ref[$i];
+// 			for ($i=0; $i<count($fields_ref); $i++){
+// 				$fileds[] = &$fields_ref[$i];
 // 			}
         }
         $query .= $whereQuery;
@@ -224,7 +224,7 @@ class Model_DbTable_Base {
 // 			$refArr = array_merge(array("0"=>$types),$fileds);
 // 			$method->invokeArgs($stmt,$refArr);
             $index =1;
-            foreach ($fileds_ref as $key=>&$filed){
+            foreach ($fields_ref as $key=>&$filed){
                 $stmt->bindParam($index, $filed,PDO::PARAM_STR);
                 $index++;
             }
@@ -259,12 +259,18 @@ class Model_DbTable_Base {
     {
         #TODO App_Mysql_Exceptions
         $rows = $this->fetchAll($where,$withJoin,1);
-//        foreach($rows[0] as $key=>$val){
-//            if(isset($this->$key)){
-//                $this->$key = $rows[0]->$key;
-//            }
-//        }
-        return count($rows) ? $rows[0] : null;
+        $hasOne = count($rows);
+        if($hasOne){
+            foreach($rows[0] as $key=>$val){
+                if(property_exists($this,$key)){
+                    $this->$key = $val;
+                }
+            }
+
+        }
+
+
+        return $hasOne != 0 ? $this : null;
     }
 
 }

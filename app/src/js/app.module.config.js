@@ -28,10 +28,10 @@
                 views:{
                     "@":{
                         templateProvider:[
-                            'User',
-                            function(User){
-                                if(User.get()){
-                                    return '<h1>Hellow '+User.get().first_name+' '+User.get().last_name+' ( logged )</h1>'
+                            'User','$templateCache',
+                            function(User, $templateCache){
+                                if(User.get() != null){
+                                    return '<h1>Hellow '+User.get().first_name+' '+User.get().last_name+' ( logged )</h1>' + $templateCache.get("app/src/js/Dashboard/inedx.tpl.html");
                                 }
                                 return '<h1>welcome</h1> <div style="text-align: center"><h2><a ui-sref="auth.private.signup">SignUp</a></h2></div>';
                             }
