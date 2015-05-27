@@ -38,7 +38,7 @@ module.run(["$templateCache", function($templateCache) {
     "    <div class=\"menu years align-right\">\n" +
     "        <ul>\n" +
     "            <li><a href=\"#\" class=\"button \" title=\"2010\">2008</a></li>\n" +
-    "            <li><a href=\"#\" class=\"button \" title=\"2010\">2009</a></li>\n" +
+    "            <li><a href=\"#\" class=\"button secondary\" title=\"2010\">2009</a></li>\n" +
     "            <li><a href=\"#\" class=\"button \" title=\"2010\">2010</a></li>\n" +
     "            <li><a href=\"#\" class=\"button \" title=\"2010\">2011</a></li>\n" +
     "            <li><a href=\"#\" class=\"button \" title=\"2010\">2012</a></li>\n" +
@@ -90,28 +90,28 @@ catch(err) { module = angular.module("Bizbuzim", []); }
 module.run(["$templateCache", function($templateCache) {
   "use strict";
   $templateCache.put("app/src/js/Auth/partials/login.tpl.html",
-    "<div id=\"login\" class=\"active\">\n" +
+    "<div id=\"login\" class=\"active\" ng-controller=\"LoginController as LoginCtrl\">\n" +
     "    <h1>Welcome Back!</h1>\n" +
     "\n" +
-    "    <form action=\"/\" method=\"post\">\n" +
+    "    <form action=\"/\" method=\"post\" name=\"LoginForm\">\n" +
     "\n" +
     "        <div class=\"field-wrap\">\n" +
     "            <label>\n" +
     "                Email Address<span class=\"req\">*</span>\n" +
     "            </label>\n" +
-    "            <input type=\"email\"required autocomplete=\"off\"/>\n" +
+    "            <input type=\"email\" ng-model=\"LoginCtrl.credentials.email\" name=\"email\" required autocomplete=\"off\"/>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"field-wrap\">\n" +
     "            <label>\n" +
     "                Password<span class=\"req\">*</span>\n" +
     "            </label>\n" +
-    "            <input type=\"password\"required autocomplete=\"off\"/>\n" +
+    "            <input type=\"password\" ng-model=\"LoginCtrl.credentials.password\" name=\"password\" required autocomplete=\"off\"/>\n" +
     "        </div>\n" +
     "\n" +
     "        <p class=\"forgot\"><a href=\"#\">Forgot Password?</a></p>\n" +
     "\n" +
-    "        <button class=\"button button-block\">Log In</button>\n" +
+    "        <button class=\"button button-block\" ng-click=\"LoginCtrl.send(SignUpForm)\">Log In</button>\n" +
     "\n" +
     "    </form>\n" +
     "\n" +

@@ -269,7 +269,6 @@ class Model_DbTable_Base {
 
         }
 
-
         return $hasOne != 0 ? $this : null;
     }
 

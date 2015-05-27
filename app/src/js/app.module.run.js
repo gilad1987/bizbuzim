@@ -1,11 +1,13 @@
 (function () {
 
-    function Run()
+    function Run(AuthService,$rootScope)
     {
+        $rootScope.$on('$stateChangeStart',function(event,next){
 
+        });
 
     }
 
-    angular.module('Bizbuzim').run([Run]);
+    angular.module('Bizbuzim').run(['AuthService','$rootScope',Run]);
 
 })();

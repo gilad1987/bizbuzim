@@ -9,86 +9,102 @@
 class Controller_Site_Users extends Controller_Users{
 
 
-    /**
-     * @url POST /user
-     */
-    public function _login(){
-        $this->checkAuth();
-        $post = $this->_http->getPost();
-        $user = new Model_Site_User();
-        $terms = array();
-        if(!empty($post->password)){
-            $terms['password'] = $post->password;
-        }
-        if(!empty($post->email)){
-            $terms['email'] = $post->email;
-        }
-
-
-        $validations = array(
-            'email'=>'email',
-            'password'=>'anything'
-        );
-
-        $required = array('email', 'password');
-        $sanitize = array('first_name', 'last_name', 'email', 'password');
-        $validator = new FormValidator($validations, $required, $sanitize);
-
-        if( !$validator->validate($terms) ){
-            throw new RestException(200,json_encode($validator->getErrors()));
-        }
-
-        $validator->sanitize($terms);
-        $user->password = $terms['password'];
-        $user->email = $terms['email'];
-        $this->login($user);
-
-        return array('success'=>true);
-
+    public function __construct()
+    {
+        parent::__construct();
     }
+
+    /**
+     * @url GET /
+     */
+    public function getLogged(){
+        $user = $this->_auth->getLoggedUser();
+        if(isset($user->id)){
+            $user->userRole = $user->permission;
+            return array('user'=>$user->cleanOutput());
+        }
+        return array('status'=>'No user are logged');
+    }
+
 
     /**
      * @url POST /
+     * @return stdClass
+     * @throws RestException
      */
-    public function signUp()
+    public function signUpOrLogin()
     {
-        $this->checkAuth();
+        $this->checkCSRF();
 
-        $user = $this->buildUserPreSignUp();
-        $fieldsToCheck = array(
-            'email'=>$user->email
-        );
-        $userExist = $this->isExist($user,$fieldsToCheck);
+        $loggedUser = $this->_auth->getLoggedUser();
         $response = new stdClass();
-        if($userExist){
-            if($this->encrypt($userExist->password) != $this->encrypt($user->password)){
-//                $response->success = false;
-                $response->message = 'Mail already exist';
-                throw new RestException(200,json_encode($response));
 
+        if($loggedUser != null){
+            $response->user = $loggedUser;
+            $response->status = 'logged';
+        }else{
+            $post = $this->_http->getPost();
+
+            if(!isset($post['email'])){
+                throw new RestException(200,json_encode(array('message'=>'Email is missing')));
             }
-            $this->login($userExist);
-            $userExist->userRole = $userExist->permission;
-            $response->user = $userExist->cleanOutput();
-            $response->token = CSRFUtil::getInstance()->getToken(true);
 
-            return $response;
+            if(!FormValidator::validateItem($post['email'],'email')){
+                throw new RestException(200,json_encode(array('message'=>'Invalid Email address')));
+            }
+
+            $userExist = $this->get(array('email'=>$post['email']));
+
+            if($userExist != null){
+                if(isset($post['password']) && ($userExist->password == $this->encrypt($post['password']))){
+                    $this->login($userExist);
+                    $response->status = 'login';
+                    $response->user = $userExist;
+                }else{
+                    $response->message = 'Mail already exist';
+                    throw new RestException(200,json_encode($response));
+                }
+            }else{
+                $this->signUp();
+                $response->status = 'signup';
+            }
         }
 
-        $user->insertOrUpdate();
-        $response->success = true;
+        if(isset($response->user)){
+            $response->user->userRole = $response->user->permission;
+            $response->user->cleanOutput();
+        }
 
+        $response->token = CSRFUtil::getInstance()->getToken(true);
         return $response;
+
+
     }
 
     /**
+     * @return Model_User
+     */
+    private function signUp()
+    {
+        $user = $this->buildUserPreSignUp();
+        $user->insertOrUpdate();
+        return $user;
+    }
+
+    /**
+     * @param bool $throw
      * @return bool
      * @throws RestException
      */
-    public function checkAuth(){
+    public function checkCSRF($throw = true){
         if(!$this->csrfIsValid()){
-            throw new RestException(200,json_encode(array('msg'=>'Invalid auth')));
+            if($throw){
+                throw new RestException(200,json_encode(array('msg'=>'Invalid auth')));
+            }else{
+                return false;
+            }
         }
+
         return true;
     }
 

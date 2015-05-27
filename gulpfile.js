@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     minifyCss = require('gulp-minify-css');
 
 var SCRIPTS_SRC = [
+    'AppConfig.js',
     'app/components/jquery/dist/jquery.js',
     'app/components/angular/angular.js',
     'app/components/angular-ui-router/release/angular-ui-router.js',

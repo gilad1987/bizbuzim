@@ -10,7 +10,7 @@ class Controller_Admin_Users extends Controller_Users{
 
     public function authorize()
     {
-        $user = $this->getLogin();
+        $user = $this->getLogged();
         return ($user != null && $user->permission == Controller_Users::PERMISSION_ADMIN);
     }
 

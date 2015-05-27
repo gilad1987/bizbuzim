@@ -9,10 +9,10 @@
         var self = this;
 
         this.user = {
-            email:'asd@asd.com',
-            first_name:'aS',
-            last_name:'as',
-            password:'123123'
+            //email:'asd@asd.com',
+            //first_name:'aS',
+            //last_name:'as',
+            //password:'123123'
         };
 
         this.errorMessages = null;

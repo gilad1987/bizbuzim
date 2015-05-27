@@ -8,26 +8,29 @@
 
 class Controller_Users extends Controller_Base{
 
-    const COOKIE_NAME = 'SDFdsf098_sdf';
-
     /**
-     * @var Model_User | null
+     * @var auth
      */
-    private static $loggedUser = null;
+    protected $_auth;
+
+    public function __construct()
+    {
+        $this->_auth = Auth::getInstance();
+        parent::__construct();
+    }
 
     /**
      * @return Model_User | null
      */
     public function getLogged(){
-        return self::$loggedUser;
+        return $this->_auth->getLoggedUser();
     }
 
     /**
      * @return bool
      */
     public function isAdmin(){
-        $this->getLogged() &&
-        self::$loggedUser->permission == Model_DbTable_Users::PERMISSION_ADMIN;
+        $this->getLogged() && $this->getLogged()->permission >= Model_DbTable_Users::PERMISSION_ADMIN;
     }
 
     /**
@@ -42,12 +45,12 @@ class Controller_Users extends Controller_Base{
         $modelName = $this->getModel();
         $user = new $modelName();
 
-        $user->first_name = $post['first_name'];
-        $user->last_name = $post['last_name'];
-        $user->password = $this->encrypt($post['password']);
+        $user->first_name = isset($post['first_name']) ? $post['first_name'] : null;
+        $user->last_name = isset($post['last_name']) ? $post['last_name'] : null;
+        $user->password = isset($post['password']) ? $this->encrypt($post['password']) : null;
         $user->permission = Model_DbTable_Users::PERMISSION_USER;
         $user->email = $post['email'];
-        #TODO check status to STATUS_WAIT_TO_MAIL_CONFIRM
+        #TODO change status to STATUS_WAIT_TO_MAIL_CONFIRM
         $user->status = Model_DbTable_Users::STATUS_CONFIRM;
 
         return $user;
@@ -59,15 +62,10 @@ class Controller_Users extends Controller_Base{
      * @param array $fieldsToCheck
      * @return bool| Model_User
      */
-    protected function isExist(Model_User $user, $fieldsToCheck = array()){
-
-        $terms = array(
-            $user->getTableName() => (!empty($fieldsToCheck) ? $fieldsToCheck : array('email'=>$user->email))
-        );
-        $userExist = new Model_User();
-        $userExist = $userExist->fetchOne($terms);
-
-        return $userExist == null ? false : $userExist;
+    protected function isExist(Model_User $user, $fieldsToCheck = array())
+    {
+        $user = $this->get($user, $fieldsToCheck);
+        return $user == null ? false : $user;
     }
 
 
@@ -99,15 +97,29 @@ class Controller_Users extends Controller_Base{
 
 
     /**
-     * @return Model_DbTable_Users|null
+     * @param array $terms
+     * @return null | Model_User
      */
-    public function get()
+    public function get(array $terms)
     {
-        #TODO IMPLEMENT
-        if(true){
+        if(empty($terms)){
             return null;
         }
-        return new Model_DbTable_Users();
+
+        $user = new Model_User();
+        $fields = array();
+
+        foreach($terms as $key => $val){
+            if(property_exists($user,$key)){
+                $fields[$key] = $val;
+            }
+        }
+
+        $_terms = array($user->getTableName() => $fields);
+
+        $user = $user->fetchOne($_terms);
+
+        return $user == null ? null : $user;
     }
 
     protected function getAll(){
@@ -122,14 +134,7 @@ class Controller_Users extends Controller_Base{
      * @throws exception
      */
     protected function login(Model_User $user){
-
-        if(!isset($user->id)){
-            throw new exception('invalid user to login - missing id');
-        }
-        $user->session = md5($user->email.uniqid(rand(1,987987987)));
-        setcookie(Controller_Users::COOKIE_NAME,$user->session,null,null,'/');
-        $user->insertOrUpdate();
-        return $user;
-
+        $this->_auth->login($user);
+        return $this;
     }
 }

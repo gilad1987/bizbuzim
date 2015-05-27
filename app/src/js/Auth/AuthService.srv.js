@@ -10,13 +10,28 @@
         function $get($http, User, $q){
 
             authService.login = function (credentials) {
-                return $http
-                    .post('/login', credentials)
-                    .then(function (res) {
-                        User.create(res.data.id, res.data.user.id,
-                            res.data.user.role);
-                        return res.data.user;
-                    });
+
+
+                var deferred = $q.defer();
+
+                function onSuccess(response){
+                    if(response.data.error){
+                        onFail(response);
+                    }
+                    if(response.data.user){
+                        response.data.user.authToken = response.data.token;
+                        User.create(response.data.user);
+                    }
+                    deferred.resolve(response);
+                }
+
+                function onFail(reason){
+                    deferred.reject(reason);
+                }
+
+                $http.post('api/user', credentials).then(onSuccess,onFail);
+                return deferred.promise;
+
             };
 
             authService.signUp = function (user) {
@@ -39,6 +54,7 @@
                 }
 
                 $http.post('api/user', user).then(onSuccess,onFail);
+
                 return deferred.promise;
             };
 
@@ -52,6 +68,26 @@
                 }
                 return (authService.isAuthenticated() &&
                 authorizedRoles.indexOf(User.userRole) !== -1);
+            };
+
+            authService.getLogged = function(){
+                var deferred = $q.defer();
+
+                function onSuccess(response){
+                    if(response.data.user){
+                        User.create(response.data.user);
+                    }
+
+                    deferred.resolve(response);
+                }
+
+                function onFail(reason){
+                    deferred.reject(reason);
+                }
+
+                $http.get('api/user').then(onSuccess,onFail);
+
+                return deferred.promise;
             };
 
             return authService;
