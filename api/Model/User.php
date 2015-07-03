@@ -18,6 +18,8 @@ class Model_User extends Model_DbTable_Users{
         unset($this->session);
         unset($this->status);
         unset($this->password);
+        unset($this->ip);
+        unset($this->last_time_login);
         unset($this->permission);
         return $this;
     }

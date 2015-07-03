@@ -111,7 +111,7 @@ module.run(["$templateCache", function($templateCache) {
     "\n" +
     "        <p class=\"forgot\"><a href=\"#\">Forgot Password?</a></p>\n" +
     "\n" +
-    "        <button class=\"button button-block\" ng-click=\"LoginCtrl.send(SignUpForm)\">Log In</button>\n" +
+    "        <button class=\"button button-block\" ng-click=\"LoginCtrl.send(LoginForm)\">Log In</button>\n" +
     "\n" +
     "    </form>\n" +
     "\n" +

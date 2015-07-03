@@ -8,4 +8,8 @@
 
 class Controller_Site_Auth extends Auth {
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
 }

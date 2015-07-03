@@ -8,7 +8,6 @@
 
 class Controller_Site_Users extends Controller_Users{
 
-
     public function __construct()
     {
         parent::__construct();
@@ -56,28 +55,47 @@ class Controller_Site_Users extends Controller_Users{
             $userExist = $this->get(array('email'=>$post['email']));
 
             if($userExist != null){
-                if(isset($post['password']) && ($userExist->password == $this->encrypt($post['password']))){
-                    $this->login($userExist);
-                    $response->status = 'login';
-                    $response->user = $userExist;
+                // user in login state
+                if(isset($post['password']) && !isset($post['first_name'])){
+                    if($userExist->password == $this->encrypt($post['password'])){
+                        $this->login($userExist);
+                        $response->status = 'login';
+                        $response->user = $userExist;
+                    }else{
+                        $response->message = 'Invalid password or email';
+                        throw new RestException(200,json_encode($response));
+                    }
                 }else{
                     $response->message = 'Mail already exist';
                     throw new RestException(200,json_encode($response));
                 }
             }else{
+                if(!isset($post['first_name']) || !isset($post['last_name'])){
+                    $response->message = 'Invalid password or email';
+                    throw new RestException(200,json_encode($response));
+                }
                 $this->signUp();
                 $response->status = 'signup';
             }
         }
 
+        return $this->response($response);
+
+
+    }
+
+
+    private function response(stdClass $response){
         if(isset($response->user)){
             $response->user->userRole = $response->user->permission;
             $response->user->cleanOutput();
         }
-
         $response->token = CSRFUtil::getInstance()->getToken(true);
         return $response;
+    }
 
+
+    private function _login(){
 
     }
 

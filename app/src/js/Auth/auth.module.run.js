@@ -1,12 +1,14 @@
 (function () {
 
-    function Run(AuthService, $rootScope)
+    function Run(AuthService, $rootScope, User, $state)
     {
-        AuthService.getLogged().then(function(){
-            console.log('AuthService.getLogged');
+        AuthService.getLogged().then(function(response){
+            if(User.isAuthenticate()){
+                $state.go('public.index');
+            }
         });
     }
 
-    angular.module('auth').run(['AuthService','$rootScope',Run]);
+    angular.module('auth').run(['AuthService','$rootScope','User','$state',Run]);
 
 })();

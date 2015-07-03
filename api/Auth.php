@@ -26,6 +26,10 @@ class Auth {
         return self::$_instance;
     }
 
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return Model_User|null
@@ -72,6 +76,8 @@ class Auth {
             throw new exception('Invalid user to login - missing id');
         }
         $user->session = md5($user->email.uniqid(rand(1,987987987)));
+        $user->ip = $_SERVER['REMOTE_ADDR'];
+        $user->last_time_login = date('Y-m-d H:i:s');
         $user->insertOrUpdate();
 
         setcookie(self::COOKIE_NAME,$user->session);

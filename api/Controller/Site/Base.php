@@ -7,5 +7,9 @@
  */
 
 class Controller_Site_Base extends Controller_Base{
-
+    
+    public function __construct()
+    {
+        parent::__construct();
+    }
 }

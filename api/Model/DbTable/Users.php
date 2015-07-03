@@ -26,7 +26,9 @@ class Model_DbTable_Users extends Model_DbTable_Base{
     public $picture;
     public $session;
     public $registration_token;
-    public $userRole;
+    public $ip;
+    public $last_time_login;
+    public $userRole; // no in database
 
     public function __construct()
     {
@@ -42,6 +44,8 @@ class Model_DbTable_Users extends Model_DbTable_Base{
             'password',
             'picture',
             'session',
+            'last_time_login',
+            'ip',
             'registration_token'
         );
 
@@ -54,6 +58,8 @@ class Model_DbTable_Users extends Model_DbTable_Base{
             'password'          =>PDO::PARAM_STR,
             'picture'           =>PDO::PARAM_STR,
             'registration_token'=>PDO::PARAM_STR,
+            'ip'                =>PDO::PARAM_STR,
+            'last_time_login'   =>PDO::PARAM_STR,
             'session'           =>PDO::PARAM_STR,
             'id'                =>PDO::PARAM_INT
         );

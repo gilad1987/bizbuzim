@@ -6,18 +6,20 @@
 (function () {
 
 
-    function LoginController()
+    function LoginController(AuthService, $state, $rootScope, AUTH_EVENTS)
     {
+
+        var self = this;
 
         this.credentials = {};
 
         this.send = function(LoginForm){
-
             if(LoginForm.$valid){
                 function onSuccess(response){
                     if(response.data.user){
-                        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess,response);
+                        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess,response.data);
                         $state.go('public.index');
+                        return true;
                     }
 
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed,response);
@@ -29,11 +31,11 @@
                     $rootScope.$broadcast(AUTH_EVENTS.signUpFailed,reason);
                 }
 
-                AuthService.signUp(this.credentials).then(onSuccess,onFail);
+                AuthService.login(this.credentials).then(onSuccess,onFail);
             }
         };
     }
 
-    angular.module('auth').controller('LoginController',[LoginController]);
+    angular.module('auth').controller('LoginController',['AuthService','$state','$rootScope','AUTH_EVENTS',LoginController]);
 
 })();

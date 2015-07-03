@@ -11,12 +11,12 @@
 
             authService.login = function (credentials) {
 
-
                 var deferred = $q.defer();
 
                 function onSuccess(response){
                     if(response.data.error){
                         onFail(response);
+                        return false;
                     }
                     if(response.data.user){
                         response.data.user.authToken = response.data.token;
@@ -30,8 +30,8 @@
                 }
 
                 $http.post('api/user', credentials).then(onSuccess,onFail);
-                return deferred.promise;
 
+                return deferred.promise;
             };
 
             authService.signUp = function (user) {
@@ -78,10 +78,11 @@
                         User.create(response.data.user);
                     }
 
-                    deferred.resolve(response);
+                    deferred.resolve(response.data);
                 }
 
                 function onFail(reason){
+
                     deferred.reject(reason);
                 }
 

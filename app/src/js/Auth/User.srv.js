@@ -45,11 +45,16 @@
                 return user.authToken;
             }
 
+            function isAuthenticate(){
+                return user != null;
+            }
+
             return {
                 create:create,
                 destroy:destroy,
                 get:get,
-                getAuthToken:getAuthToken
+                getAuthToken:getAuthToken,
+                isAuthenticate:isAuthenticate
             }
 
         }
